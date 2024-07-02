@@ -1,0 +1,3 @@
+fastapi #библиотека для создания веб-приложений
+requests
+fastapi-cache2

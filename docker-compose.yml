@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  geocoding_service:
+    build: ./geocoding_service
+    volumes:
+    - ./logs:/app/logs
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENWEATHERMAP_API_KEY=1d0961a43b1bc856e6fcd0312859eb68
+      - GEOCODING_SERVICE_TOKEN=geocoding_service_token
+      - BASE_URL_GEO=http://api.openweathermap.org/geo/1.0/direct
+      - LOG_PATH=/app/logs/app.log
+      
+
+
+  weather_service:
+    build: ./weather_service
+    volumes:
+    - ./logs:/app/logs
+    ports:
+      - "8002:8002"
+    depends_on:
+      - geocoding_service
+    environment:
+      - API_KEY=1d0961a43b1bc856e6fcd0312859eb68
+      - WEATHER_TOKEN=weather_service_token
+      - BASEURL_GEOCODING=http://host.docker.internal:8001
+      - GEO_TOKEN=geocoding_service_token
+      - LOG_PATH=/app/logs/app.log
+      - BASEURL_WEATHER=http://api.openweathermap.org/data/2.5
+
+
